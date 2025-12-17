@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
 import { TenantService } from '@core/services/tenant.service';
@@ -34,7 +35,7 @@ interface NavItem {
               class="hp-sidebar__link"
               [attr.title]="collapsed ? item.label : null"
             >
-              <span class="hp-sidebar__icon" [innerHTML]="item.icon"></span>
+              <span class="hp-sidebar__icon" [innerHTML]="sanitizeHtml(item.icon)"></span>
               <span *ngIf="!collapsed" class="hp-sidebar__label">{{ item.label }}</span>
               <hp-badge *ngIf="item.badge && !collapsed" variant="error" size="sm">
                 {{ item.badge }}
@@ -302,11 +303,16 @@ export class SidebarComponent {
   constructor(
     private tenantService: TenantService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) {
     this.tenantName$ = this.tenantService.tenant$.pipe(
       map(tenant => tenant?.name || 'HandyPro')
     );
+  }
+
+  sanitizeHtml(html: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
   toggleCollapse(): void {

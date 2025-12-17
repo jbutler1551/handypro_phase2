@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TenantService } from '@core/services/tenant.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -85,7 +86,7 @@ interface RecentJob {
             class="hp-dashboard__action-card"
             [style.--action-color]="action.color"
           >
-            <div class="hp-dashboard__action-icon" [innerHTML]="action.icon"></div>
+            <div class="hp-dashboard__action-icon" [innerHTML]="sanitizeHtml(action.icon)"></div>
             <span class="hp-dashboard__action-label">{{ action.label }}</span>
           </a>
         </div>
@@ -122,7 +123,7 @@ interface RecentJob {
           </div>
           <div class="hp-dashboard__activity">
             <div *ngFor="let activity of activities" class="hp-dashboard__activity-item">
-              <div class="hp-dashboard__activity-icon" [innerHTML]="activity.icon"></div>
+              <div class="hp-dashboard__activity-icon" [innerHTML]="sanitizeHtml(activity.icon)"></div>
               <div class="hp-dashboard__activity-content">
                 <p class="hp-dashboard__activity-text">{{ activity.text }}</p>
                 <span class="hp-dashboard__activity-time">{{ activity.time }}</span>
@@ -462,7 +463,14 @@ export class DashboardComponent implements OnInit {
     { icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>', text: 'Job scheduled for tomorrow at 9 AM', time: '5 hours ago' }
   ];
 
-  constructor(private tenantService: TenantService) {}
+  constructor(
+    private tenantService: TenantService,
+    private sanitizer: DomSanitizer
+  ) {}
+
+  sanitizeHtml(html: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
+  }
 
   ngOnInit(): void {
     this.userName$ = this.tenantService.tenant$.pipe(

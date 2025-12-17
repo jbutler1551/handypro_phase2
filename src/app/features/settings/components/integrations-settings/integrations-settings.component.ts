@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 interface Integration {
   id: string;
@@ -25,7 +26,7 @@ interface Integration {
             *ngFor="let integration of connectedIntegrations"
             class="hp-integrations-settings__item"
           >
-            <div class="hp-integrations-settings__item-icon" [innerHTML]="integration.icon"></div>
+            <div class="hp-integrations-settings__item-icon" [innerHTML]="sanitizeHtml(integration.icon)"></div>
             <div class="hp-integrations-settings__item-info">
               <span class="hp-integrations-settings__item-name">{{ integration.name }}</span>
               <span class="hp-integrations-settings__item-description">{{ integration.description }}</span>
@@ -68,7 +69,7 @@ interface Integration {
             *ngFor="let integration of filteredIntegrations"
             class="hp-integrations-settings__card"
           >
-            <div class="hp-integrations-settings__card-icon" [innerHTML]="integration.icon"></div>
+            <div class="hp-integrations-settings__card-icon" [innerHTML]="sanitizeHtml(integration.icon)"></div>
             <h3 class="hp-integrations-settings__card-name">{{ integration.name }}</h3>
             <p class="hp-integrations-settings__card-description">{{ integration.description }}</p>
             <hp-button variant="outline" size="sm" [fullWidth]="true" (click)="connect(integration)">
@@ -387,6 +388,12 @@ export class IntegrationsSettingsComponent {
   selectedCategory: string = 'all';
   showApiKey = false;
   apiKey = 'hp_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+
+  constructor(private sanitizer: DomSanitizer) {}
+
+  sanitizeHtml(html: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
+  }
 
   categories = [
     { label: 'All', value: 'all' },

@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 interface SettingsNavItem {
   label: string;
@@ -25,7 +26,7 @@ interface SettingsNavItem {
             routerLinkActive="hp-settings__nav-item--active"
             class="hp-settings__nav-item"
           >
-            <span class="hp-settings__nav-icon" [innerHTML]="item.icon"></span>
+            <span class="hp-settings__nav-icon" [innerHTML]="sanitizeHtml(item.icon)"></span>
             <span class="hp-settings__nav-label">{{ item.label }}</span>
           </a>
         </nav>
@@ -164,6 +165,12 @@ interface SettingsNavItem {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsComponent {
+  constructor(private sanitizer: DomSanitizer) {}
+
+  sanitizeHtml(html: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
+  }
+
   navItems: SettingsNavItem[] = [
     {
       label: 'Account',

@@ -1,4 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'hp-stat-card',
@@ -6,7 +7,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
     <div class="hp-stat-card">
       <div class="hp-stat-card__header">
         <span class="hp-stat-card__label">{{ label }}</span>
-        <span *ngIf="icon" class="hp-stat-card__icon" [innerHTML]="icon"></span>
+        <span *ngIf="icon" class="hp-stat-card__icon" [innerHTML]="sanitizedIcon"></span>
       </div>
 
       <div class="hp-stat-card__value">
@@ -16,7 +17,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
       <div *ngIf="trend !== undefined" class="hp-stat-card__trend"
            [class.hp-stat-card__trend--positive]="trend > 0"
            [class.hp-stat-card__trend--negative]="trend < 0">
-        <span class="hp-stat-card__trend-icon">{{ trend > 0 ? '↑' : trend < 0 ? '↓' : '→' }}</span>
+        <span class="hp-stat-card__trend-icon" [innerHTML]="trendIcon"></span>
         <span class="hp-stat-card__trend-value">{{ Math.abs(trend) }}%</span>
         <span *ngIf="trendLabel" class="hp-stat-card__trend-label">{{ trendLabel }}</span>
       </div>
@@ -24,7 +25,11 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
       <a *ngIf="actionLink" [routerLink]="actionLink" class="hp-stat-card__action">
         {{ actionLabel }}
         <span *ngIf="actionCount !== undefined"> ({{ actionCount }})</span>
-        <span class="hp-stat-card__action-icon">→</span>
+        <span class="hp-stat-card__action-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </span>
       </a>
     </div>
   `,
@@ -126,7 +131,13 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
       }
 
       &__trend-icon {
-        font-weight: var(--hp-font-weight-bold);
+        display: flex;
+        align-items: center;
+
+        svg {
+          width: 14px;
+          height: 14px;
+        }
       }
 
       &__trend-value {
@@ -164,7 +175,14 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
       }
 
       &__action-icon {
+        display: flex;
+        align-items: center;
         transition: transform var(--hp-micro-normal) ease-out;
+
+        svg {
+          width: 16px;
+          height: 16px;
+        }
       }
 
       &:hover &__action-icon {
@@ -186,6 +204,24 @@ export class StatCardComponent {
   @Input() actionCount?: number;
 
   Math = Math;
+
+  constructor(private sanitizer: DomSanitizer) {}
+
+  get sanitizedIcon(): SafeHtml | null {
+    return this.icon ? this.sanitizer.bypassSecurityTrustHtml(this.icon) : null;
+  }
+
+  get trendIcon(): SafeHtml {
+    let svg: string;
+    if (this.trend !== undefined && this.trend > 0) {
+      svg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>';
+    } else if (this.trend !== undefined && this.trend < 0) {
+      svg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+    } else {
+      svg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>';
+    }
+    return this.sanitizer.bypassSecurityTrustHtml(svg);
+  }
 
   get formattedValue(): string {
     switch (this.format) {

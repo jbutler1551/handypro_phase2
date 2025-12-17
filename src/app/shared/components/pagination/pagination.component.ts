@@ -10,7 +10,9 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, OnChan
         (click)="goToPage(currentPage - 1)"
         aria-label="Previous page"
       >
-        ←
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
       </button>
 
       <div class="hp-pagination__pages">
@@ -32,7 +34,9 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, OnChan
         (click)="goToPage(currentPage + 1)"
         aria-label="Next page"
       >
-        →
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
       </button>
 
       <span *ngIf="showInfo" class="hp-pagination__info">
@@ -66,6 +70,11 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, OnChan
                     color var(--hp-micro-normal) ease-in-out,
                     box-shadow var(--hp-micro-normal) ease-in-out,
                     transform var(--hp-micro-fast) ease-out;
+
+        svg {
+          width: 18px;
+          height: 18px;
+        }
 
         &:hover:not(:disabled) {
           background-color: var(--hp-glass-bg-subtle);

@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
 import { TenantService } from '@core/services/tenant.service';
@@ -46,7 +47,7 @@ interface NavItem {
               class="hp-mobile-nav__link"
               (click)="close()"
             >
-              <span class="hp-mobile-nav__icon" [innerHTML]="item.icon"></span>
+              <span class="hp-mobile-nav__icon" [innerHTML]="sanitizeHtml(item.icon)"></span>
               <span class="hp-mobile-nav__label">{{ item.label }}</span>
             </a>
           </li>
@@ -324,11 +325,16 @@ export class MobileNavComponent {
   constructor(
     private tenantService: TenantService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) {
     this.tenantName$ = this.tenantService.tenant$.pipe(
       map(tenant => tenant?.name || 'HandyPro')
     );
+  }
+
+  sanitizeHtml(html: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
   close(): void {
