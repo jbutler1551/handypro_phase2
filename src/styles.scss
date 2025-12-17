@@ -1,1 +1,553 @@
-/* You can add global styles to this file, and also import other style files */
+// ============================================================================
+// HandyPro SaaS Platform - Global Styles
+// ============================================================================
+
+// ==========================================================================
+// DESIGN SYSTEM IMPORTS
+// ==========================================================================
+@import 'styles/variables';
+@import 'styles/mixins';
+@import 'styles/typography';
+@import 'styles/utilities';
+
+// ==========================================================================
+// CSS RESET / NORMALIZE
+// ==========================================================================
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--hp-bg-secondary);
+  color: var(--hp-text-primary);
+  line-height: var(--hp-line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 200ms ease-in-out, color 200ms ease-in-out;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+#root,
+#__next {
+  isolation: isolate;
+}
+
+// ==========================================================================
+// GLOBAL FOCUS STYLES
+// ==========================================================================
+*:focus-visible {
+  outline: 2px solid var(--hp-color-primary);
+  outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+// ==========================================================================
+// SELECTION STYLES
+// ==========================================================================
+::selection {
+  background-color: var(--hp-color-primary-100);
+  color: var(--hp-color-primary-900);
+}
+
+// ==========================================================================
+// SCROLLBAR STYLES
+// ==========================================================================
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--hp-color-neutral-100);
+  border-radius: var(--hp-radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--hp-color-neutral-300);
+  border-radius: var(--hp-radius-full);
+
+  &:hover {
+    background: var(--hp-color-neutral-400);
+  }
+}
+
+// Firefox
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--hp-color-neutral-300) var(--hp-color-neutral-100);
+}
+
+// ==========================================================================
+// FORM ELEMENT RESETS
+// ==========================================================================
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+input,
+textarea,
+select {
+  background: none;
+  border: none;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+}
+
+// Remove autofill styles
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--hp-color-neutral-0) inset !important;
+  -webkit-text-fill-color: var(--hp-color-neutral-900) !important;
+}
+
+// ==========================================================================
+// LINK RESETS
+// ==========================================================================
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+// ==========================================================================
+// LIST RESETS
+// ==========================================================================
+ul,
+ol {
+  list-style: none;
+}
+
+// ==========================================================================
+// TABLE RESETS
+// ==========================================================================
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+// ==========================================================================
+// ANGULAR MATERIAL OVERRIDES
+// ==========================================================================
+// These will be added as needed to customize Angular Material components
+// to match the HandyPro design system
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+// ==========================================================================
+// APP LAYOUT CONTAINER
+// ==========================================================================
+.hp-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hp-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+// ==========================================================================
+// CONTAINER CLASSES
+// ==========================================================================
+.hp-container {
+  @include container;
+}
+
+.hp-container-sm {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--hp-spacing-4);
+  padding-right: var(--hp-spacing-4);
+}
+
+.hp-container-md {
+  max-width: 768px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--hp-spacing-4);
+  padding-right: var(--hp-spacing-4);
+}
+
+.hp-container-lg {
+  max-width: 1024px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--hp-spacing-4);
+  padding-right: var(--hp-spacing-4);
+}
+
+.hp-container-xl {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--hp-spacing-4);
+  padding-right: var(--hp-spacing-4);
+}
+
+// ==========================================================================
+// GRID SYSTEM
+// ==========================================================================
+.hp-grid {
+  display: grid;
+  gap: var(--hp-spacing-4);
+}
+
+.hp-grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.hp-grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.hp-grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.hp-grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.hp-grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.hp-grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+// Responsive grid
+@include respond-to(md) {
+  .hp-grid-cols-md-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hp-grid-cols-md-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .hp-grid-cols-md-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@include respond-to(lg) {
+  .hp-grid-cols-lg-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hp-grid-cols-lg-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .hp-grid-cols-lg-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+// Column spans
+.hp-col-span-1 { grid-column: span 1 / span 1; }
+.hp-col-span-2 { grid-column: span 2 / span 2; }
+.hp-col-span-3 { grid-column: span 3 / span 3; }
+.hp-col-span-4 { grid-column: span 4 / span 4; }
+.hp-col-span-6 { grid-column: span 6 / span 6; }
+.hp-col-span-8 { grid-column: span 8 / span 8; }
+.hp-col-span-12 { grid-column: span 12 / span 12; }
+.hp-col-span-full { grid-column: 1 / -1; }
+
+// ==========================================================================
+// PAGE LAYOUTS
+// ==========================================================================
+.hp-page {
+  padding: var(--hp-spacing-6);
+
+  @include respond-to(lg) {
+    padding: var(--hp-spacing-8);
+  }
+}
+
+.hp-page-header {
+  margin-bottom: var(--hp-spacing-6);
+
+  @include respond-to(lg) {
+    margin-bottom: var(--hp-spacing-8);
+  }
+}
+
+.hp-page-title {
+  @extend .hp-heading-2;
+  margin-bottom: var(--hp-spacing-2);
+}
+
+.hp-page-subtitle {
+  @extend .hp-body;
+  color: var(--hp-color-neutral-500);
+}
+
+// ==========================================================================
+// SECTION STYLES
+// ==========================================================================
+.hp-section {
+  margin-bottom: var(--hp-spacing-8);
+}
+
+.hp-section-title {
+  @extend .hp-heading-4;
+  margin-bottom: var(--hp-spacing-4);
+}
+
+// ==========================================================================
+// ANIMATION CLASSES
+// ==========================================================================
+.hp-animate-fade-in {
+  animation: fadeIn var(--hp-transition-normal) var(--hp-ease-out);
+}
+
+.hp-animate-slide-up {
+  animation: slideUp var(--hp-transition-normal) var(--hp-ease-out);
+}
+
+.hp-animate-slide-down {
+  animation: slideDown var(--hp-transition-normal) var(--hp-ease-out);
+}
+
+.hp-animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.hp-animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+// ==========================================================================
+// MODERN GLASSMORPHISM UTILITIES (2025-2026 Design Trends)
+// ==========================================================================
+
+// Glass effect utilities
+.hp-glass {
+  @include glass-progressive;
+}
+
+.hp-glass--subtle {
+  @include glass-progressive('subtle', true);
+}
+
+.hp-glass--prominent {
+  @include glass-progressive('prominent', true);
+}
+
+.hp-glass-card {
+  @include glass-card;
+}
+
+.hp-glass-responsive {
+  @include glass-responsive;
+}
+
+// ==========================================================================
+// MODERN ELEVATION & HOVER UTILITIES
+// ==========================================================================
+.hp-float {
+  @include hover-lift;
+}
+
+.hp-elevate {
+  @include hover-elevate;
+}
+
+.hp-scale-hover {
+  @include hover-scale;
+}
+
+.hp-scale-hover--normal {
+  @include hover-scale('normal');
+}
+
+.hp-scale-hover--prominent {
+  @include hover-scale('prominent');
+}
+
+// ==========================================================================
+// GLOW EFFECT UTILITIES
+// ==========================================================================
+.hp-glow {
+  @include interactive-glow;
+}
+
+.hp-glow-pulse {
+  @include animate-glow-pulse;
+}
+
+.hp-glow--success {
+  @include interactive-glow('success');
+}
+
+.hp-glow--error {
+  @include interactive-glow('error');
+}
+
+// ==========================================================================
+// MODERN GRADIENT UTILITIES
+// ==========================================================================
+.hp-aurora-bg {
+  @include aurora-background;
+}
+
+.hp-gradient-soft {
+  @include gradient-soft;
+}
+
+.hp-gradient-animated {
+  @include gradient-animated;
+}
+
+.hp-gradient-text {
+  @include gradient-text;
+}
+
+// ==========================================================================
+// NOISE TEXTURE UTILITY
+// ==========================================================================
+.hp-noise {
+  @include noise-texture;
+}
+
+// ==========================================================================
+// MODERN BORDER RADIUS UTILITIES
+// ==========================================================================
+.hp-rounded-modern-xs { border-radius: var(--hp-radius-modern-xs) !important; }
+.hp-rounded-modern-sm { border-radius: var(--hp-radius-modern-sm) !important; }
+.hp-rounded-modern { border-radius: var(--hp-radius-modern-base) !important; }
+.hp-rounded-modern-md { border-radius: var(--hp-radius-modern-md) !important; }
+.hp-rounded-modern-lg { border-radius: var(--hp-radius-modern-lg) !important; }
+.hp-rounded-modern-xl { border-radius: var(--hp-radius-modern-xl) !important; }
+.hp-rounded-modern-2xl { border-radius: var(--hp-radius-modern-2xl) !important; }
+
+// ==========================================================================
+// MODERN ANIMATION UTILITIES
+// ==========================================================================
+.hp-animate-scale-in {
+  @include animate-scale-in;
+}
+
+.hp-animate-slide-up-fade {
+  @include animate-slide-up-fade;
+}
+
+.hp-animate-float {
+  @include animate-float;
+}
+
+.hp-animate-shimmer {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    @include animate-shimmer;
+  }
+}
+
+// Staggered animations for lists
+@for $i from 1 through 12 {
+  .hp-stagger-#{$i} {
+    @include animate-slide-up-fade(var(--hp-transition-normal), #{$i * 50}ms);
+  }
+}
+
+// ==========================================================================
+// MODERN FOCUS RING (Global override)
+// ==========================================================================
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--hp-bg-primary),
+              0 0 0 4px var(--hp-color-primary),
+              var(--hp-glow-primary-subtle);
+}
+
+// ==========================================================================
+// MODERN SELECTION STYLES
+// ==========================================================================
+::selection {
+  background-color: var(--hp-color-primary);
+  color: white;
+}
+
+// ==========================================================================
+// MODERN SCROLLBAR STYLES (Glass-like)
+// ==========================================================================
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--hp-glass-bg);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: var(--hp-radius-full);
+
+  &:hover {
+    background: var(--hp-color-neutral-400);
+    background-clip: padding-box;
+  }
+}
+
+// Firefox
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--hp-glass-bg) transparent;
+}
+
+// ==========================================================================
+// AURORA BACKGROUND FOR BODY
+// ==========================================================================
+body.hp-with-aurora {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: var(--hp-gradient-mesh);
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+
+// ==========================================================================
+// REDUCED MOTION PREFERENCES
+// ==========================================================================
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

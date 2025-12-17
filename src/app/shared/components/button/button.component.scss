@@ -1,0 +1,270 @@
+.hp-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--hp-spacing-2);
+  font-family: var(--hp-font-family-primary);
+  font-weight: var(--hp-font-weight-medium);
+  letter-spacing: var(--hp-letter-spacing-wide);
+  border-radius: var(--hp-radius-modern-sm);
+  cursor: pointer;
+  border: none;
+  transition: background-color var(--hp-micro-normal) var(--hp-ease-in-out),
+              border-color var(--hp-micro-normal) var(--hp-ease-in-out),
+              box-shadow var(--hp-micro-normal) var(--hp-ease-in-out),
+              transform var(--hp-micro-fast) var(--hp-ease-out),
+              filter var(--hp-micro-normal) var(--hp-ease-in-out),
+              color var(--hp-micro-normal) var(--hp-ease-in-out);
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+
+  // Modern focus ring with glow
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--hp-bg-primary),
+                0 0 0 4px var(--hp-color-primary),
+                var(--hp-glow-primary-subtle);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  // Press effect (micro-interaction)
+  &:active:not(:disabled) {
+    transform: scale(var(--hp-scale-press));
+  }
+
+  // ==========================================================================
+  // VARIANTS
+  // ==========================================================================
+  &--primary {
+    background: var(--hp-gradient-primary);
+    color: white;
+    box-shadow: var(--hp-shadow-xs);
+
+    &:hover:not(:disabled) {
+      box-shadow: var(--hp-shadow-primary);
+      filter: brightness(1.05);
+    }
+
+    &:active:not(:disabled) {
+      filter: brightness(0.95);
+    }
+  }
+
+  &--secondary {
+    background: var(--hp-gradient-secondary);
+    color: white;
+    box-shadow: var(--hp-shadow-xs);
+
+    &:hover:not(:disabled) {
+      box-shadow: var(--hp-shadow-secondary);
+      filter: brightness(1.05);
+    }
+
+    &:active:not(:disabled) {
+      filter: brightness(0.95);
+    }
+  }
+
+  &--outline {
+    background-color: transparent;
+    color: var(--hp-color-primary);
+    border: 1px solid var(--hp-color-primary);
+    box-shadow: none;
+
+    &:hover:not(:disabled) {
+      background-color: var(--hp-color-primary-50);
+      box-shadow: var(--hp-glow-primary-subtle);
+    }
+
+    &:active:not(:disabled) {
+      background-color: var(--hp-color-primary-100);
+    }
+  }
+
+  &--ghost {
+    background-color: transparent;
+    color: var(--hp-text-secondary);
+
+    &:hover:not(:disabled) {
+      background-color: var(--hp-bg-tertiary);
+      color: var(--hp-text-primary);
+    }
+
+    &:active:not(:disabled) {
+      background-color: var(--hp-border-primary);
+    }
+  }
+
+  // Glass variant (NEW)
+  &--glass {
+    background: var(--hp-surface-card);
+    color: var(--hp-text-primary);
+    border: 1px solid var(--hp-glass-border);
+
+    @supports (backdrop-filter: blur(1px)) {
+      background: var(--hp-glass-bg-subtle);
+      backdrop-filter: blur(var(--hp-blur-sm));
+      -webkit-backdrop-filter: blur(var(--hp-blur-sm));
+    }
+
+    &:hover:not(:disabled) {
+      @supports (backdrop-filter: blur(1px)) {
+        background: var(--hp-glass-bg);
+        backdrop-filter: blur(var(--hp-blur-md));
+        -webkit-backdrop-filter: blur(var(--hp-blur-md));
+      }
+      box-shadow: var(--hp-glow-primary-subtle);
+    }
+  }
+
+  &--danger {
+    background: linear-gradient(135deg, var(--hp-color-error), var(--hp-color-error-dark));
+    color: white;
+    box-shadow: var(--hp-shadow-xs);
+
+    &:hover:not(:disabled) {
+      box-shadow: var(--hp-glow-error);
+      filter: brightness(1.05);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 2px var(--hp-bg-primary),
+                  0 0 0 4px var(--hp-color-error),
+                  var(--hp-glow-error);
+    }
+  }
+
+  &--link {
+    background-color: transparent;
+    color: var(--hp-color-primary);
+    padding: 0;
+    height: auto;
+    min-height: auto;
+    border-radius: 0;
+
+    &:hover:not(:disabled) {
+      text-decoration: underline;
+    }
+
+    &:active:not(:disabled) {
+      transform: none;
+    }
+  }
+
+  // ==========================================================================
+  // SIZES
+  // ==========================================================================
+  &--sm {
+    height: 34px;
+    padding: 0 var(--hp-spacing-4);
+    font-size: var(--hp-font-size-sm);
+    border-radius: var(--hp-radius-lg);
+  }
+
+  &--md {
+    height: 42px;
+    padding: 0 var(--hp-spacing-5);
+    font-size: var(--hp-font-size-sm);
+    border-radius: var(--hp-radius-modern-sm);
+  }
+
+  &--lg {
+    height: 50px;
+    padding: 0 var(--hp-spacing-6);
+    font-size: var(--hp-font-size-base);
+    border-radius: var(--hp-radius-modern-sm);
+  }
+
+  // ==========================================================================
+  // MODIFIERS
+  // ==========================================================================
+  &--full-width {
+    width: 100%;
+  }
+
+  &--loading {
+    pointer-events: none;
+  }
+
+  // Shimmer effect modifier (for CTA emphasis)
+  &--shimmer {
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      );
+      background-size: 200% 100%;
+      animation: shimmer 2s infinite;
+    }
+  }
+
+  // ==========================================================================
+  // ELEMENTS
+  // ==========================================================================
+  &__content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--hp-spacing-2);
+    position: relative;
+    z-index: 1;
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+
+    &--left {
+      margin-right: var(--hp-spacing-1);
+    }
+
+    &--right {
+      margin-left: var(--hp-spacing-1);
+    }
+  }
+
+  &__spinner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin-right: var(--hp-spacing-2);
+  }
+
+  &__spinner-icon {
+    width: 100%;
+    height: 100%;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

@@ -1,10 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { TenantThemeService } from '@core/services/tenant-theme.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'hp-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent {
-  title = 'handypro-saas';
+export class AppComponent implements OnInit {
+  constructor(private tenantThemeService: TenantThemeService) {}
+
+  ngOnInit(): void {
+    // Initialize tenant theme on app startup
+    this.tenantThemeService.applyTheme();
+  }
 }

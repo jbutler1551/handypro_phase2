@@ -1,0 +1,853 @@
+// ============================================================================
+// HandyPro Design System - Mixins
+// ============================================================================
+
+@use 'sass:map';
+
+// ==========================================================================
+// BREAKPOINT MIXINS
+// ==========================================================================
+$breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+) !default;
+
+// Min-width media query (mobile-first)
+@mixin respond-to($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (min-width: map.get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$breakpoint}";
+  }
+}
+
+// Max-width media query (desktop-first)
+@mixin respond-below($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (max-width: map.get($breakpoints, $breakpoint) - 1px) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$breakpoint}";
+  }
+}
+
+// Between breakpoints
+@mixin respond-between($lower, $upper) {
+  @if map.has-key($breakpoints, $lower) and map.has-key($breakpoints, $upper) {
+    @media (min-width: map.get($breakpoints, $lower)) and (max-width: map.get($breakpoints, $upper) - 1px) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint(s): #{$lower}, #{$upper}";
+  }
+}
+
+// ==========================================================================
+// FLEXBOX MIXINS
+// ==========================================================================
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@mixin flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flex-column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+// ==========================================================================
+// LAYOUT MIXINS
+// ==========================================================================
+@mixin container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--hp-spacing-4);
+  padding-right: var(--hp-spacing-4);
+
+  @include respond-to(lg) {
+    padding-left: var(--hp-spacing-6);
+    padding-right: var(--hp-spacing-6);
+  }
+}
+
+@mixin section-padding {
+  padding-top: var(--hp-spacing-8);
+  padding-bottom: var(--hp-spacing-8);
+
+  @include respond-to(md) {
+    padding-top: var(--hp-spacing-12);
+    padding-bottom: var(--hp-spacing-12);
+  }
+}
+
+// ==========================================================================
+// CARD MIXINS
+// ==========================================================================
+@mixin card-base {
+  background-color: var(--hp-surface-card);
+  border-radius: var(--hp-radius-lg);
+  box-shadow: var(--hp-shadow-sm);
+}
+
+@mixin card-elevated {
+  background-color: var(--hp-surface-card);
+  border-radius: var(--hp-radius-lg);
+  box-shadow: var(--hp-shadow-lg);
+}
+
+@mixin card-bordered {
+  background-color: var(--hp-surface-card);
+  border-radius: var(--hp-radius-lg);
+  border: 1px solid var(--hp-color-neutral-200);
+}
+
+@mixin card-interactive {
+  cursor: pointer;
+  transition: var(--hp-transition-shadow), var(--hp-transition-transform);
+
+  &:hover {
+    box-shadow: var(--hp-shadow-md);
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--hp-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+// ==========================================================================
+// BUTTON MIXINS
+// ==========================================================================
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--hp-spacing-2);
+  font-family: var(--hp-font-family-primary);
+  font-weight: var(--hp-font-weight-medium);
+  border-radius: var(--hp-radius-md);
+  cursor: pointer;
+  border: none;
+  transition: var(--hp-transition-colors), var(--hp-transition-shadow);
+
+  &:focus-visible {
+    outline: 2px solid var(--hp-color-primary);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@mixin button-size($size) {
+  @if $size == 'sm' {
+    height: 32px;
+    padding: 0 var(--hp-spacing-4);
+    font-size: var(--hp-font-size-sm);
+  } @else if $size == 'md' {
+    height: 40px;
+    padding: 0 var(--hp-spacing-5);
+    font-size: var(--hp-font-size-sm);
+  } @else if $size == 'lg' {
+    height: 48px;
+    padding: 0 var(--hp-spacing-6);
+    font-size: var(--hp-font-size-base);
+  }
+}
+
+// ==========================================================================
+// INPUT MIXINS
+// ==========================================================================
+@mixin input-base {
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--hp-spacing-3);
+  font-family: var(--hp-font-family-primary);
+  font-size: var(--hp-font-size-sm);
+  color: var(--hp-color-neutral-900);
+  background-color: var(--hp-color-neutral-0);
+  border: 1px solid var(--hp-color-neutral-300);
+  border-radius: var(--hp-radius-md);
+  transition: var(--hp-transition-colors);
+
+  &::placeholder {
+    color: var(--hp-color-neutral-400);
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--hp-color-neutral-400);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--hp-color-primary);
+    box-shadow: 0 0 0 3px var(--hp-color-primary-100);
+  }
+
+  &:disabled {
+    background-color: var(--hp-color-neutral-100);
+    cursor: not-allowed;
+  }
+}
+
+@mixin input-error {
+  border-color: var(--hp-color-error);
+
+  &:focus {
+    border-color: var(--hp-color-error);
+    box-shadow: 0 0 0 3px var(--hp-color-error-light);
+  }
+}
+
+// ==========================================================================
+// FOCUS MIXINS
+// ==========================================================================
+@mixin focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--hp-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+@mixin focus-ring-inset {
+  &:focus-visible {
+    outline: 2px solid var(--hp-color-primary);
+    outline-offset: -2px;
+  }
+}
+
+// ==========================================================================
+// ACCESSIBILITY MIXINS
+// ==========================================================================
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@mixin screen-reader-only {
+  @include visually-hidden;
+}
+
+// ==========================================================================
+// SCROLLBAR MIXINS
+// ==========================================================================
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--hp-color-neutral-100);
+    border-radius: var(--hp-radius-full);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--hp-color-neutral-300);
+    border-radius: var(--hp-radius-full);
+
+    &:hover {
+      background: var(--hp-color-neutral-400);
+    }
+  }
+}
+
+@mixin hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// ==========================================================================
+// ANIMATION MIXINS
+// ==========================================================================
+@mixin fade-in($duration: var(--hp-transition-normal)) {
+  animation: fadeIn $duration var(--hp-ease-out);
+}
+
+@mixin slide-up($duration: var(--hp-transition-normal)) {
+  animation: slideUp $duration var(--hp-ease-out);
+}
+
+@mixin slide-down($duration: var(--hp-transition-normal)) {
+  animation: slideDown $duration var(--hp-ease-out);
+}
+
+// Keyframes
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+// ==========================================================================
+// ELEVATION MIXINS
+// ==========================================================================
+@mixin elevation($level) {
+  @if $level == 1 {
+    box-shadow: var(--hp-shadow-xs);
+  } @else if $level == 2 {
+    box-shadow: var(--hp-shadow-sm);
+  } @else if $level == 3 {
+    box-shadow: var(--hp-shadow-md);
+  } @else if $level == 4 {
+    box-shadow: var(--hp-shadow-lg);
+  } @else if $level == 5 {
+    box-shadow: var(--hp-shadow-xl);
+  }
+}
+
+// ==========================================================================
+// TRUNCATE MIXINS
+// ==========================================================================
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin line-clamp($lines) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// ==========================================================================
+// GLASSMORPHISM MIXINS (2025-2026 Design Trends)
+// ==========================================================================
+
+/// Glass effect with backdrop blur and semi-transparent background
+/// @param {String} $variant - 'subtle', 'default', or 'prominent'
+/// @param {Boolean} $with-border - Include glass border
+@mixin glass-effect($variant: 'default', $with-border: true) {
+  @if $variant == 'subtle' {
+    background: var(--hp-glass-bg-subtle);
+    backdrop-filter: blur(var(--hp-blur-sm));
+    -webkit-backdrop-filter: blur(var(--hp-blur-sm));
+  } @else if $variant == 'prominent' {
+    background: var(--hp-glass-bg-prominent);
+    backdrop-filter: blur(var(--hp-blur-xl));
+    -webkit-backdrop-filter: blur(var(--hp-blur-xl));
+  } @else {
+    background: var(--hp-glass-bg);
+    backdrop-filter: blur(var(--hp-blur-md));
+    -webkit-backdrop-filter: blur(var(--hp-blur-md));
+  }
+
+  @if $with-border {
+    border: 1px solid var(--hp-glass-border);
+  }
+}
+
+/// Glass effect with fallback for unsupported browsers
+@mixin glass-progressive($variant: 'default', $with-border: true) {
+  // Fallback for browsers without backdrop-filter
+  background: var(--hp-surface-card);
+
+  @supports (backdrop-filter: blur(1px)) {
+    @include glass-effect($variant, $with-border);
+  }
+}
+
+/// Glass card with elevation and modern radius
+/// @param {Boolean} $elevated - Apply elevation shadow
+@mixin glass-card($elevated: true) {
+  @include glass-progressive('default', true);
+  border-radius: var(--hp-radius-modern-base);
+  transition: background-color 200ms ease-in-out,
+              border-color 200ms ease-in-out,
+              box-shadow var(--hp-micro-normal) var(--hp-ease-out),
+              transform var(--hp-micro-normal) var(--hp-ease-out);
+
+  @if $elevated {
+    box-shadow: var(--hp-shadow-glass);
+  }
+}
+
+/// Reduced blur for mobile performance
+@mixin glass-effect-mobile {
+  background: var(--hp-glass-bg-prominent);
+  backdrop-filter: blur(var(--hp-blur-xs));
+  -webkit-backdrop-filter: blur(var(--hp-blur-xs));
+  border: 1px solid var(--hp-glass-border);
+
+  @supports not (backdrop-filter: blur(1px)) {
+    background: var(--hp-surface-card);
+  }
+}
+
+/// Glass effect with responsive optimization
+@mixin glass-responsive($variant: 'default') {
+  @include glass-progressive($variant, true);
+
+  @include respond-below(md) {
+    @include glass-effect-mobile;
+  }
+}
+
+// ==========================================================================
+// GLOW EFFECT MIXINS
+// ==========================================================================
+
+/// Glow effect by color
+/// @param {String} $color - 'primary', 'secondary', 'success', 'warning', 'error', 'info'
+@mixin glow-effect($color: 'primary') {
+  @if $color == 'secondary' {
+    box-shadow: var(--hp-glow-secondary);
+  } @else if $color == 'success' {
+    box-shadow: var(--hp-glow-success);
+  } @else if $color == 'warning' {
+    box-shadow: var(--hp-glow-warning);
+  } @else if $color == 'error' {
+    box-shadow: var(--hp-glow-error);
+  } @else if $color == 'info' {
+    box-shadow: var(--hp-glow-info);
+  } @else {
+    box-shadow: var(--hp-glow-primary);
+  }
+}
+
+/// Interactive glow on hover/focus
+@mixin interactive-glow($color: 'primary') {
+  transition: box-shadow var(--hp-micro-normal) var(--hp-ease-out),
+              transform var(--hp-micro-normal) var(--hp-ease-out);
+
+  &:hover {
+    @if $color == 'primary' {
+      box-shadow: var(--hp-glow-primary-subtle);
+    } @else {
+      @include glow-effect($color);
+    }
+  }
+
+  &:focus-visible {
+    @include glow-effect($color);
+  }
+}
+
+// ==========================================================================
+// MICRO-INTERACTION MIXINS
+// ==========================================================================
+
+/// Subtle scale on hover
+/// @param {String} $intensity - 'subtle', 'normal', or 'prominent'
+@mixin hover-scale($intensity: 'subtle') {
+  transition: transform var(--hp-micro-normal) var(--hp-ease-out);
+
+  @if $intensity == 'prominent' {
+    &:hover {
+      transform: scale(var(--hp-scale-prominent));
+    }
+  } @else if $intensity == 'normal' {
+    &:hover {
+      transform: scale(var(--hp-scale-normal));
+    }
+  } @else {
+    &:hover {
+      transform: scale(var(--hp-scale-subtle));
+    }
+  }
+}
+
+/// Lift effect (translateY + shadow increase)
+/// @param {Number} $distance - Lift distance in pixels
+@mixin hover-lift($distance: -4px) {
+  transition: transform var(--hp-micro-normal) var(--hp-ease-out),
+              box-shadow var(--hp-micro-normal) var(--hp-ease-out);
+
+  &:hover {
+    transform: translateY($distance);
+    box-shadow: var(--hp-shadow-lg);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+/// Combined hover effect (scale + lift + glow)
+@mixin hover-elevate {
+  transition: transform var(--hp-micro-normal) var(--hp-ease-out),
+              box-shadow var(--hp-micro-normal) var(--hp-ease-out);
+
+  &:hover {
+    transform: translateY(-2px) scale(var(--hp-scale-subtle));
+    box-shadow: var(--hp-shadow-elevation-colored);
+  }
+
+  &:active {
+    transform: translateY(0) scale(1);
+  }
+}
+
+/// Button press effect
+@mixin button-press {
+  transition: transform var(--hp-micro-fast) var(--hp-ease-out);
+
+  &:active:not(:disabled) {
+    transform: scale(var(--hp-scale-press));
+  }
+}
+
+/// Slide on hover (for nav items)
+/// @param {String} $direction - 'left' or 'right'
+/// @param {Number} $distance - Slide distance
+@mixin hover-slide($direction: 'right', $distance: 4px) {
+  transition: transform var(--hp-micro-normal) var(--hp-ease-out);
+
+  &:hover {
+    @if $direction == 'left' {
+      transform: translateX(-$distance);
+    } @else {
+      transform: translateX($distance);
+    }
+  }
+}
+
+// ==========================================================================
+// GRADIENT MIXINS
+// ==========================================================================
+
+/// Soft gradient background
+/// @param {String} $direction - Gradient direction
+@mixin gradient-soft($direction: 135deg) {
+  background: linear-gradient($direction,
+    var(--hp-color-primary-50),
+    var(--hp-bg-secondary));
+}
+
+/// Aurora/mesh gradient background
+@mixin aurora-background {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--hp-gradient-mesh);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/// Animated gradient background
+@mixin gradient-animated {
+  background: linear-gradient(
+    -45deg,
+    var(--hp-color-primary-50),
+    var(--hp-color-secondary-50),
+    var(--hp-color-primary-100),
+    var(--hp-bg-secondary)
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+/// Gradient text effect
+@mixin gradient-text {
+  background: var(--hp-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// ==========================================================================
+// NOISE TEXTURE MIXIN
+// ==========================================================================
+
+/// Subtle noise overlay for texture
+@mixin noise-texture {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--hp-noise-texture);
+    opacity: var(--hp-noise-opacity);
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: overlay;
+    border-radius: inherit;
+  }
+}
+
+// ==========================================================================
+// MODERN CARD MIXINS
+// ==========================================================================
+
+/// Floating card with enhanced depth
+@mixin floating-card {
+  @include glass-card(true);
+  @include hover-elevate;
+  border-radius: var(--hp-radius-modern-lg);
+}
+
+/// Modern solid card (non-glass)
+@mixin modern-card($interactive: false) {
+  background-color: var(--hp-surface-card);
+  border-radius: var(--hp-radius-modern-base);
+  box-shadow: var(--hp-shadow-sm);
+  border: 1px solid var(--hp-border-primary);
+  transition: background-color 200ms ease-in-out,
+              border-color 200ms ease-in-out,
+              box-shadow var(--hp-micro-normal) var(--hp-ease-out),
+              transform var(--hp-micro-normal) var(--hp-ease-out);
+
+  @if $interactive {
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: var(--hp-shadow-md);
+      transform: translateY(-2px);
+      border-color: var(--hp-color-primary-200);
+    }
+  }
+}
+
+// ==========================================================================
+// MODERN BUTTON MIXINS
+// ==========================================================================
+
+/// Modern button with gradient and glow
+@mixin modern-button-primary {
+  background: var(--hp-gradient-primary);
+  border: none;
+  border-radius: var(--hp-radius-modern-sm);
+  @include button-press;
+  @include interactive-glow;
+
+  &:hover:not(:disabled) {
+    box-shadow: var(--hp-shadow-primary);
+    filter: brightness(1.05);
+  }
+}
+
+/// Glass button variant
+@mixin modern-button-glass {
+  @include glass-effect('subtle', true);
+  border-radius: var(--hp-radius-modern-sm);
+  @include button-press;
+
+  &:hover:not(:disabled) {
+    @include glass-effect('default', true);
+    box-shadow: var(--hp-glow-primary-subtle);
+  }
+}
+
+// ==========================================================================
+// MODERN FOCUS RING
+// ==========================================================================
+
+/// Modern focus ring with glow
+@mixin modern-focus-ring {
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--hp-bg-primary),
+                0 0 0 4px var(--hp-color-primary),
+                var(--hp-glow-primary-subtle);
+  }
+}
+
+// ==========================================================================
+// MODERN ANIMATION KEYFRAMES
+// ==========================================================================
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: var(--hp-glow-primary-subtle);
+  }
+  50% {
+    box-shadow: var(--hp-glow-primary);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Animation utility mixins
+@mixin animate-scale-in($duration: var(--hp-transition-normal)) {
+  animation: scaleIn $duration var(--hp-ease-out);
+}
+
+@mixin animate-slide-up-fade($duration: var(--hp-transition-normal), $delay: 0ms) {
+  animation: slideUpFade $duration var(--hp-ease-out) $delay both;
+}
+
+@mixin animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@mixin animate-glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+@mixin animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+// ==========================================================================
+// PERFORMANCE & ACCESSIBILITY UTILITIES
+// ==========================================================================
+
+/// GPU acceleration for animations
+@mixin gpu-accelerate {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/// Respect reduced motion preferences
+@mixin reduced-motion-safe {
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

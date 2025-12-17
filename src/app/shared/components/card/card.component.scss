@@ -1,0 +1,139 @@
+.hp-card {
+  background-color: var(--hp-surface-card);
+  border-radius: var(--hp-radius-modern-base);
+  box-shadow: var(--hp-shadow-sm);
+  border: 1px solid var(--hp-border-primary);
+  transition: background-color 200ms ease-in-out,
+              border-color 200ms ease-in-out,
+              box-shadow var(--hp-micro-normal) var(--hp-ease-out),
+              transform var(--hp-micro-normal) var(--hp-ease-out);
+
+  // ==========================================================================
+  // HEADER
+  // ==========================================================================
+  &__header {
+    padding: var(--hp-spacing-4) var(--hp-spacing-6);
+    border-bottom: 1px solid var(--hp-glass-border);
+    transition: border-color 200ms ease-in-out;
+  }
+
+  // ==========================================================================
+  // BODY
+  // ==========================================================================
+  &__body {
+    padding: var(--hp-spacing-6);
+  }
+
+  // ==========================================================================
+  // FOOTER
+  // ==========================================================================
+  &__footer {
+    padding: var(--hp-spacing-4) var(--hp-spacing-6);
+    border-top: 1px solid var(--hp-glass-border);
+    background-color: var(--hp-bg-secondary);
+    border-radius: 0 0 var(--hp-radius-modern-base) var(--hp-radius-modern-base);
+    transition: background-color 200ms ease-in-out, border-color 200ms ease-in-out;
+  }
+
+  // ==========================================================================
+  // VARIANTS
+  // ==========================================================================
+  &--elevated {
+    box-shadow: var(--hp-shadow-lg);
+    border: none;
+  }
+
+  &--bordered {
+    box-shadow: none;
+    border: 1px solid var(--hp-border-primary);
+  }
+
+  // Glass variant (NEW)
+  &--glass {
+    background: var(--hp-surface-card);
+    border: 1px solid var(--hp-glass-border);
+    box-shadow: var(--hp-shadow-glass);
+
+    @supports (backdrop-filter: blur(1px)) {
+      background: var(--hp-glass-bg);
+      backdrop-filter: blur(var(--hp-blur-md));
+      -webkit-backdrop-filter: blur(var(--hp-blur-md));
+    }
+
+    .hp-card__header {
+      border-bottom-color: var(--hp-glass-border);
+    }
+
+    .hp-card__footer {
+      background-color: transparent;
+      border-top-color: var(--hp-glass-border);
+      border-radius: 0 0 var(--hp-radius-modern-base) var(--hp-radius-modern-base);
+    }
+  }
+
+  // Floating variant (NEW - enhanced elevation with glow)
+  &--floating {
+    box-shadow: var(--hp-shadow-elevation-colored);
+    border: 1px solid var(--hp-glass-border);
+
+    &:hover {
+      box-shadow: var(--hp-shadow-xl), var(--hp-glow-primary-subtle);
+      transform: translateY(-2px);
+    }
+  }
+
+  &--interactive {
+    cursor: pointer;
+    transition: box-shadow var(--hp-micro-normal) var(--hp-ease-out),
+                transform var(--hp-micro-normal) var(--hp-ease-out),
+                border-color var(--hp-micro-normal) var(--hp-ease-out);
+
+    &:hover {
+      box-shadow: var(--hp-shadow-md), var(--hp-glow-primary-subtle);
+      transform: translateY(-3px) scale(var(--hp-scale-subtle));
+      border-color: var(--hp-color-primary-200);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--hp-bg-primary),
+                  0 0 0 4px var(--hp-color-primary),
+                  var(--hp-glow-primary-subtle);
+    }
+
+    &:active {
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  // Glow variant (NEW - subtle glow on hover)
+  &--glow {
+    &:hover {
+      box-shadow: var(--hp-shadow-sm), var(--hp-glow-primary-subtle);
+    }
+  }
+
+  // ==========================================================================
+  // MODIFIERS
+  // ==========================================================================
+  &--no-padding {
+    .hp-card__body {
+      padding: 0;
+    }
+  }
+
+  // Compact modifier
+  &--compact {
+    .hp-card__header {
+      padding: var(--hp-spacing-3) var(--hp-spacing-4);
+    }
+
+    .hp-card__body {
+      padding: var(--hp-spacing-4);
+    }
+
+    .hp-card__footer {
+      padding: var(--hp-spacing-3) var(--hp-spacing-4);
+    }
+  }
+}

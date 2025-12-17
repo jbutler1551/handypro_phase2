@@ -1,0 +1,226 @@
+.hp-input {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  // ==========================================================================
+  // LABEL
+  // ==========================================================================
+  &__label {
+    font-size: var(--hp-font-size-sm);
+    font-weight: var(--hp-font-weight-medium);
+    color: var(--hp-text-secondary);
+    margin-bottom: var(--hp-spacing-2);
+    display: flex;
+    align-items: center;
+    gap: var(--hp-spacing-1);
+    transition: color 200ms ease-in-out;
+    letter-spacing: var(--hp-letter-spacing-wide);
+  }
+
+  &__required {
+    color: var(--hp-color-error);
+  }
+
+  // ==========================================================================
+  // INPUT WRAPPER
+  // ==========================================================================
+  &__wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  // ==========================================================================
+  // INPUT FIELD
+  // ==========================================================================
+  &__field {
+    width: 100%;
+    height: 44px;
+    padding: 0 var(--hp-spacing-4);
+    font-family: var(--hp-font-family-primary);
+    font-size: var(--hp-font-size-sm);
+    color: var(--hp-text-primary);
+    background-color: var(--hp-input-bg);
+    border: 1px solid var(--hp-input-border);
+    border-radius: var(--hp-radius-modern-sm);
+    transition: border-color var(--hp-micro-normal) ease-in-out,
+                box-shadow var(--hp-micro-normal) ease-in-out,
+                background-color 200ms ease-in-out,
+                color 200ms ease-in-out;
+
+    &::placeholder {
+      color: var(--hp-input-placeholder);
+    }
+
+    &:hover:not(:disabled):not(:focus) {
+      border-color: var(--hp-border-secondary);
+      background-color: var(--hp-glass-bg-subtle);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--hp-border-focus);
+      box-shadow: 0 0 0 3px var(--hp-color-primary-100),
+                  var(--hp-glow-primary-subtle);
+    }
+
+    &:disabled {
+      background-color: var(--hp-input-disabled-bg);
+      cursor: not-allowed;
+      color: var(--hp-text-disabled);
+    }
+
+    &--has-prefix {
+      padding-left: 44px;
+    }
+
+    &--has-suffix {
+      padding-right: 44px;
+    }
+  }
+
+  // ==========================================================================
+  // PREFIX & SUFFIX
+  // ==========================================================================
+  &__prefix,
+  &__suffix {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--hp-text-tertiary);
+    pointer-events: none;
+    transition: color 200ms ease-in-out;
+  }
+
+  &__prefix {
+    left: var(--hp-spacing-3);
+  }
+
+  &__suffix {
+    right: var(--hp-spacing-3);
+  }
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // ==========================================================================
+  // PASSWORD TOGGLE
+  // ==========================================================================
+  &__toggle {
+    position: absolute;
+    right: var(--hp-spacing-3);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--hp-text-tertiary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--hp-spacing-1);
+    border-radius: var(--hp-radius-modern-xs);
+    transition: color var(--hp-micro-normal) ease-in-out,
+                background-color var(--hp-micro-normal) ease-in-out,
+                transform var(--hp-micro-fast) ease-out;
+
+    &:hover {
+      color: var(--hp-text-primary);
+      background-color: var(--hp-glass-bg-subtle);
+    }
+
+    &:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--hp-bg-primary),
+                  0 0 0 4px var(--hp-color-primary),
+                  var(--hp-glow-primary-subtle);
+    }
+  }
+
+  // ==========================================================================
+  // HINT & ERROR
+  // ==========================================================================
+  &__hint,
+  &__error {
+    font-size: var(--hp-font-size-xs);
+    margin-top: var(--hp-spacing-2);
+    margin-bottom: 0;
+    transition: color 200ms ease-in-out;
+  }
+
+  &__hint {
+    color: var(--hp-text-tertiary);
+  }
+
+  &__error {
+    color: var(--hp-color-error);
+  }
+
+  // ==========================================================================
+  // ERROR STATE
+  // ==========================================================================
+  &--error {
+    .hp-input__field {
+      border-color: var(--hp-border-error);
+
+      &:focus {
+        border-color: var(--hp-border-error);
+        box-shadow: 0 0 0 3px var(--hp-color-error-light),
+                    var(--hp-glow-error);
+      }
+    }
+
+    .hp-input__prefix,
+    .hp-input__suffix {
+      color: var(--hp-color-error);
+    }
+  }
+
+  // ==========================================================================
+  // DISABLED STATE
+  // ==========================================================================
+  &--disabled {
+    .hp-input__label {
+      color: var(--hp-text-disabled);
+    }
+  }
+
+  // ==========================================================================
+  // GLASS VARIANT (Optional)
+  // ==========================================================================
+  &--glass {
+    .hp-input__field {
+      background: var(--hp-surface-card);
+      border: 1px solid var(--hp-glass-border);
+
+      @supports (backdrop-filter: blur(1px)) {
+        background: var(--hp-glass-bg-subtle);
+        backdrop-filter: blur(var(--hp-blur-sm));
+        -webkit-backdrop-filter: blur(var(--hp-blur-sm));
+      }
+
+      &:focus {
+        @supports (backdrop-filter: blur(1px)) {
+          background: var(--hp-glass-bg);
+          backdrop-filter: blur(var(--hp-blur-md));
+          -webkit-backdrop-filter: blur(var(--hp-blur-md));
+        }
+        box-shadow: var(--hp-glow-primary-subtle);
+      }
+    }
+  }
+}
