@@ -20,7 +20,7 @@ interface Tenant {
       <!-- Header -->
       <div class="hp-tenant-list__header">
         <div class="hp-tenant-list__title-section">
-          <h1 class="hp-tenant-list__title">Tenants</h1>
+          <h1 class="hp-tenant-list__title">Companies</h1>
           <span class="hp-tenant-list__count">{{ filteredTenants.length }} total</span>
         </div>
         <div class="hp-tenant-list__actions">
@@ -29,7 +29,7 @@ interface Tenant {
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            Add Tenant
+            Add Company
           </hp-button>
         </div>
       </div>
@@ -38,7 +38,7 @@ interface Tenant {
       <div class="hp-tenant-list__stats">
         <div class="hp-tenant-list__stat">
           <span class="hp-tenant-list__stat-value">{{ tenants.length }}</span>
-          <span class="hp-tenant-list__stat-label">Total Tenants</span>
+          <span class="hp-tenant-list__stat-label">Total Companies</span>
         </div>
         <div class="hp-tenant-list__stat">
           <span class="hp-tenant-list__stat-value">{{ activeTenants }}</span>
@@ -63,7 +63,7 @@ interface Tenant {
           </svg>
           <input
             type="text"
-            placeholder="Search tenants..."
+            placeholder="Search companies..."
             [(ngModel)]="searchQuery"
           />
         </div>
@@ -89,10 +89,10 @@ interface Tenant {
         <table class="hp-tenant-list__table">
           <thead>
             <tr>
-              <th>Tenant</th>
+              <th>Company</th>
               <th>Plan</th>
               <th>Status</th>
-              <th>Users</th>
+              <th>Franchises</th>
               <th>MRR</th>
               <th>Created</th>
               <th></th>

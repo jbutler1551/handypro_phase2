@@ -17,7 +17,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'account', pathMatch: 'full' },
       { path: 'account', component: AccountSettingsComponent },
       { path: 'branding', component: BrandingSettingsComponent },
-      { path: 'team', component: TeamSettingsComponent },
+      { path: 'franchises', component: TeamSettingsComponent },
       { path: 'notifications', component: NotificationsSettingsComponent },
       { path: 'integrations', component: IntegrationsSettingsComponent }
     ]

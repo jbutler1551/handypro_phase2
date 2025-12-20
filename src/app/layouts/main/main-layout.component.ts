@@ -24,7 +24,7 @@ import { Observable } from 'rxjs';
       <div class="hp-main-layout__content">
         <!-- Header -->
         <hp-header
-          [pageTitle]="(pageTitle$ | async) || 'Dashboard'"
+          [pageTitle]="(pageTitle$ | async) || 'Account Settings'"
           [notificationCount]="3"
           (menuClick)="openMobileNav()"
         ></hp-header>
@@ -88,17 +88,16 @@ export class MainLayoutComponent {
 
   private routeTitles: Record<string, string> = {
     '/dashboard': 'Dashboard',
-    '/jobs': 'Jobs',
-    '/customers': 'Customers',
-    '/schedule': 'Schedule',
-    '/invoices': 'Invoices',
-    '/team': 'Team',
-    '/reports': 'Reports',
     '/settings': 'Settings',
     '/settings/account': 'Account Settings',
     '/settings/branding': 'Branding',
-    '/settings/team': 'Team Settings',
-    '/billing': 'Billing'
+    '/settings/franchises': 'Franchises',
+    '/settings/notifications': 'Notifications',
+    '/settings/integrations': 'Integrations',
+    '/billing': 'Billing',
+    '/compliance': 'Compliance',
+    '/documents': 'Documents',
+    '/reports': 'Reports'
   };
 
   constructor(private router: Router) {
@@ -117,7 +116,7 @@ export class MainLayoutComponent {
 
   private getPageTitleFromUrl(url: string): string {
     const segments = url.split('/').filter(Boolean);
-    if (segments.length === 0) return 'Dashboard';
+    if (segments.length === 0) return 'Account Settings';
     const lastSegment = segments[segments.length - 1];
     return lastSegment
       .split('-')

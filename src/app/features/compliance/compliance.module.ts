@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '@shared/shared.module';
-import { ReportsComponent } from './reports.component';
+import { ComplianceComponent } from './compliance.component';
 
 const routes: Routes = [
-  { path: '', component: ReportsComponent }
+  { path: '', component: ComplianceComponent }
 ];
 
 @NgModule({
-  declarations: [ReportsComponent],
+  declarations: [ComplianceComponent],
   imports: [
     SharedModule,
     RouterModule.forChild(routes)
   ]
 })
-export class ReportsModule {}
+export class ComplianceModule {}

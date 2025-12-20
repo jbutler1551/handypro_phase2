@@ -1,13 +1,14 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-interface TeamMember {
+interface FranchiseOwner {
   id: string;
   name: string;
   email: string;
-  role: 'owner' | 'admin' | 'manager' | 'technician';
+  role: 'owner' | 'admin' | 'franchise_owner' | 'manager';
   status: 'active' | 'pending' | 'disabled';
   avatar?: string;
+  franchiseName?: string;
   joinedAt: string;
 }
 
@@ -17,9 +18,9 @@ interface TeamMember {
     <div class="hp-team-settings">
       <!-- Invite Section -->
       <hp-card class="hp-team-settings__section">
-        <h2 class="hp-team-settings__section-title">Invite Team Members</h2>
+        <h2 class="hp-team-settings__section-title">Invite Franchise Owners</h2>
         <p class="hp-team-settings__section-description">
-          Send invitations to add new members to your team.
+          Send invitations to add new franchise owners to your organization.
         </p>
 
         <form [formGroup]="inviteForm" (ngSubmit)="sendInvite()" class="hp-team-settings__invite-form">
@@ -28,15 +29,15 @@ interface TeamMember {
               label="Email Address"
               type="email"
               formControlName="email"
-              placeholder="colleague@company.com"
+              placeholder="owner@franchise.com"
               [error]="getInviteError('email')"
             ></hp-input>
             <div class="hp-team-settings__role-select">
               <label class="hp-team-settings__role-label">Role</label>
               <select formControlName="role" class="hp-team-settings__select">
                 <option value="admin">Admin</option>
+                <option value="franchise_owner">Franchise Owner</option>
                 <option value="manager">Manager</option>
-                <option value="technician">Technician</option>
               </select>
             </div>
             <div class="hp-team-settings__invite-btn">
@@ -53,24 +54,24 @@ interface TeamMember {
         </form>
       </hp-card>
 
-      <!-- Team Members Section -->
+      <!-- Franchise Owners Section -->
       <hp-card class="hp-team-settings__section">
         <div class="hp-team-settings__header">
           <div>
-            <h2 class="hp-team-settings__section-title">Team Members</h2>
+            <h2 class="hp-team-settings__section-title">Franchise Owners</h2>
             <p class="hp-team-settings__section-description">
-              Manage your team members and their roles.
+              Manage your franchise owners and their access levels.
             </p>
           </div>
           <div class="hp-team-settings__count">
-            {{ teamMembers.length }} member{{ teamMembers.length !== 1 ? 's' : '' }}
+            {{ franchiseOwners.length }} franchise{{ franchiseOwners.length !== 1 ? 's' : '' }}
           </div>
         </div>
 
         <!-- Search -->
         <div class="hp-team-settings__search">
           <hp-input
-            placeholder="Search team members..."
+            placeholder="Search franchise owners..."
             [(ngModel)]="searchQuery"
             type="search"
           ></hp-input>
@@ -505,12 +506,12 @@ export class TeamSettingsComponent {
   openMenuId: string | null = null;
   isSendingInvite = false;
 
-  teamMembers: TeamMember[] = [
-    { id: '1', name: 'John Doe', email: 'john@acmeplumbing.com', role: 'owner', status: 'active', joinedAt: '2023-01-15' },
-    { id: '2', name: 'Sarah Johnson', email: 'sarah@acmeplumbing.com', role: 'admin', status: 'active', joinedAt: '2023-03-22' },
-    { id: '3', name: 'Mike Wilson', email: 'mike@acmeplumbing.com', role: 'manager', status: 'active', joinedAt: '2023-05-10' },
-    { id: '4', name: 'Emily Brown', email: 'emily@acmeplumbing.com', role: 'technician', status: 'active', joinedAt: '2023-06-01' },
-    { id: '5', name: 'Alex Martinez', email: 'alex@acmeplumbing.com', role: 'technician', status: 'pending', joinedAt: '2024-01-08' }
+  franchiseOwners: FranchiseOwner[] = [
+    { id: '1', name: 'John Doe', email: 'john@handypro-atlanta.com', role: 'owner', status: 'active', franchiseName: 'HandyPro Atlanta', joinedAt: '2023-01-15' },
+    { id: '2', name: 'Sarah Johnson', email: 'sarah@handypro-denver.com', role: 'franchise_owner', status: 'active', franchiseName: 'HandyPro Denver', joinedAt: '2023-03-22' },
+    { id: '3', name: 'Mike Wilson', email: 'mike@handypro-seattle.com', role: 'franchise_owner', status: 'active', franchiseName: 'HandyPro Seattle', joinedAt: '2023-05-10' },
+    { id: '4', name: 'Emily Brown', email: 'emily@handypro-phoenix.com', role: 'franchise_owner', status: 'active', franchiseName: 'HandyPro Phoenix', joinedAt: '2023-06-01' },
+    { id: '5', name: 'Alex Martinez', email: 'alex@handypro-miami.com', role: 'franchise_owner', status: 'pending', franchiseName: 'HandyPro Miami', joinedAt: '2024-01-08' }
   ];
 
   constructor(
@@ -519,18 +520,19 @@ export class TeamSettingsComponent {
   ) {
     this.inviteForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      role: ['technician', [Validators.required]]
+      role: ['franchise_owner', [Validators.required]]
     });
   }
 
-  get filteredMembers(): TeamMember[] {
+  get filteredMembers(): FranchiseOwner[] {
     if (!this.searchQuery) {
-      return this.teamMembers;
+      return this.franchiseOwners;
     }
     const query = this.searchQuery.toLowerCase();
-    return this.teamMembers.filter(m =>
+    return this.franchiseOwners.filter(m =>
       m.name.toLowerCase().includes(query) ||
-      m.email.toLowerCase().includes(query)
+      m.email.toLowerCase().includes(query) ||
+      (m.franchiseName && m.franchiseName.toLowerCase().includes(query))
     );
   }
 
@@ -554,7 +556,7 @@ export class TeamSettingsComponent {
 
       // Mock API call
       setTimeout(() => {
-        const newMember: TeamMember = {
+        const newOwner: FranchiseOwner = {
           id: Date.now().toString(),
           name: this.inviteForm.value.email.split('@')[0],
           email: this.inviteForm.value.email,
@@ -562,8 +564,8 @@ export class TeamSettingsComponent {
           status: 'pending',
           joinedAt: new Date().toISOString()
         };
-        this.teamMembers = [...this.teamMembers, newMember];
-        this.inviteForm.reset({ role: 'technician' });
+        this.franchiseOwners = [...this.franchiseOwners, newOwner];
+        this.inviteForm.reset({ role: 'franchise_owner' });
         this.isSendingInvite = false;
         this.cdr.markForCheck();
       }, 1000);
@@ -576,26 +578,26 @@ export class TeamSettingsComponent {
 
   changeRole(memberId: string, event: Event): void {
     const select = event.target as HTMLSelectElement;
-    const member = this.teamMembers.find(m => m.id === memberId);
-    if (member) {
-      member.role = select.value as TeamMember['role'];
+    const owner = this.franchiseOwners.find(m => m.id === memberId);
+    if (owner) {
+      owner.role = select.value as FranchiseOwner['role'];
     }
   }
 
-  resendInvite(member: TeamMember): void {
+  resendInvite(owner: FranchiseOwner): void {
     this.openMenuId = null;
-    console.log('Resending invite to', member.email);
+    console.log('Resending invite to', owner.email);
   }
 
-  toggleMemberStatus(member: TeamMember): void {
+  toggleMemberStatus(owner: FranchiseOwner): void {
     this.openMenuId = null;
-    member.status = member.status === 'active' ? 'disabled' : 'active';
+    owner.status = owner.status === 'active' ? 'disabled' : 'active';
     this.cdr.markForCheck();
   }
 
-  removeMember(member: TeamMember): void {
+  removeMember(owner: FranchiseOwner): void {
     this.openMenuId = null;
-    this.teamMembers = this.teamMembers.filter(m => m.id !== member.id);
+    this.franchiseOwners = this.franchiseOwners.filter(m => m.id !== owner.id);
     this.cdr.markForCheck();
   }
 }

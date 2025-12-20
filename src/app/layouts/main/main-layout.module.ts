@@ -20,36 +20,28 @@ const routes: Routes = [
         loadChildren: () => import('@features/dashboard/dashboard.module').then(m => m.DashboardModule)
       },
       {
-        path: 'jobs',
-        loadChildren: () => import('@features/jobs/jobs.module').then(m => m.JobsModule)
-      },
-      {
-        path: 'customers',
-        loadChildren: () => import('@features/customers/customers.module').then(m => m.CustomersModule)
-      },
-      {
-        path: 'schedule',
-        loadChildren: () => import('@features/schedule/schedule.module').then(m => m.ScheduleModule)
-      },
-      {
-        path: 'invoices',
-        loadChildren: () => import('@features/invoices/invoices.module').then(m => m.InvoicesModule)
-      },
-      {
-        path: 'team',
-        loadChildren: () => import('@features/team/team.module').then(m => m.TeamModule)
-      },
-      {
-        path: 'reports',
-        loadChildren: () => import('@features/reports/reports.module').then(m => m.ReportsModule)
+        path: 'settings',
+        loadChildren: () => import('@features/settings/settings.module').then(m => m.SettingsModule)
       },
       {
         path: 'billing',
         loadChildren: () => import('@features/billing/billing.module').then(m => m.BillingModule)
       },
       {
-        path: 'settings',
-        loadChildren: () => import('@features/settings/settings.module').then(m => m.SettingsModule)
+        path: 'compliance',
+        loadChildren: () => import('@features/compliance/compliance.module').then(m => m.ComplianceModule)
+      },
+      {
+        path: 'documents',
+        loadChildren: () => import('@features/documents/documents.module').then(m => m.DocumentsModule)
+      },
+      {
+        path: 'reports',
+        loadChildren: () => import('@features/reports/reports.module').then(m => m.ReportsModule)
+      },
+      {
+        path: 'franchises',
+        loadChildren: () => import('@features/franchises/franchises.module').then(m => m.FranchisesModule)
       },
       {
         path: '',

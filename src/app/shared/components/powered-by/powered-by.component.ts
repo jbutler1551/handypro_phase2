@@ -112,8 +112,8 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoweredByComponent {
-  @Input() brandName = 'HandyPro';
-  @Input() link = 'https://handypro.com';
+  @Input() brandName = 'TruztPro';
+  @Input() link = 'https://truztpro.com';
   @Input() showIcon = true;
   @Input() variant: 'light' | 'dark' | 'default' = 'default';
 
