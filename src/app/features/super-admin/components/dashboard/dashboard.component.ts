@@ -213,7 +213,7 @@ interface RecentActivity {
         <div class="hp-admin-dashboard__card hp-admin-dashboard__card--wide">
           <div class="hp-admin-dashboard__card-header">
             <h2 class="hp-admin-dashboard__card-title">Recent Platform Activity</h2>
-            <hp-button variant="ghost" size="sm" routerLink="../analytics">View All</hp-button>
+            <hp-button variant="ghost" size="sm" routerLink="../tenants">View All</hp-button>
           </div>
           <div class="hp-admin-dashboard__activity-list">
             <div *ngFor="let activity of recentActivity" class="hp-admin-dashboard__activity-item">
@@ -255,19 +255,19 @@ interface RecentActivity {
           <div class="hp-admin-dashboard__quick-actions">
             <button class="hp-admin-dashboard__quick-action" routerLink="../tenants">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              <span>View Companies</span>
+            </button>
+            <button class="hp-admin-dashboard__quick-action" routerLink="../tenants">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                 <circle cx="8.5" cy="7" r="4"></circle>
                 <line x1="20" y1="8" x2="20" y2="14"></line>
                 <line x1="23" y1="11" x2="17" y2="11"></line>
               </svg>
-              <span>Add Tenant</span>
-            </button>
-            <button class="hp-admin-dashboard__quick-action" routerLink="../feature-flags">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
-                <line x1="4" y1="22" x2="4" y2="15"></line>
-              </svg>
-              <span>Manage Flags</span>
+              <span>Add Company</span>
             </button>
             <button class="hp-admin-dashboard__quick-action" routerLink="../impersonation">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -276,12 +276,12 @@ interface RecentActivity {
               </svg>
               <span>Impersonate</span>
             </button>
-            <button class="hp-admin-dashboard__quick-action" routerLink="../system">
+            <button class="hp-admin-dashboard__quick-action" routerLink="../tenants">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="3"></circle>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
               </svg>
-              <span>System Settings</span>
+              <span>View Locations</span>
             </button>
           </div>
         </div>
@@ -859,32 +859,32 @@ export class AdminDashboardComponent {
 
   platformMetrics: PlatformMetric[] = [
     {
-      label: 'Total Tenants',
-      value: 400,
+      label: 'Companies',
+      value: 127,
       change: 12,
       changeLabel: 'vs last month',
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>'
     },
     {
-      label: 'Active Users',
+      label: 'Locations',
+      value: '1,842',
+      change: 18,
+      changeLabel: 'vs last month',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>'
+    },
+    {
+      label: 'Total Users',
       value: '2,847',
       change: 8,
       changeLabel: 'vs last month',
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>'
     },
     {
-      label: 'Monthly Revenue',
+      label: 'Gross Revenue',
       value: '$47,850',
       change: 15,
       changeLabel: 'vs last month',
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>'
-    },
-    {
-      label: 'Jobs Completed',
-      value: '18,432',
-      change: 23,
-      changeLabel: 'vs last month',
-      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>'
     }
   ];
 

@@ -1,15 +1,20 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-interface FranchiseOwner {
+interface TeamMember {
   id: string;
   name: string;
   email: string;
-  role: 'owner' | 'admin' | 'franchise_owner' | 'manager';
+  role: 'owner' | 'admin' | 'manager' | 'technician';
   status: 'active' | 'pending' | 'disabled';
   avatar?: string;
-  franchiseName?: string;
+  homeLocation?: string;
   joinedAt: string;
+}
+
+interface Location {
+  id: string;
+  name: string;
 }
 
 @Component({
@@ -18,9 +23,9 @@ interface FranchiseOwner {
     <div class="hp-team-settings">
       <!-- Invite Section -->
       <hp-card class="hp-team-settings__section">
-        <h2 class="hp-team-settings__section-title">Invite Franchise Owners</h2>
+        <h2 class="hp-team-settings__section-title">Invite Team Members</h2>
         <p class="hp-team-settings__section-description">
-          Send invitations to add new franchise owners to your organization.
+          Send invitations to add new team members to your organization.
         </p>
 
         <form [formGroup]="inviteForm" (ngSubmit)="sendInvite()" class="hp-team-settings__invite-form">
@@ -29,15 +34,22 @@ interface FranchiseOwner {
               label="Email Address"
               type="email"
               formControlName="email"
-              placeholder="owner@franchise.com"
+              placeholder="team@company.com"
               [error]="getInviteError('email')"
             ></hp-input>
             <div class="hp-team-settings__role-select">
               <label class="hp-team-settings__role-label">Role</label>
               <select formControlName="role" class="hp-team-settings__select">
                 <option value="admin">Admin</option>
-                <option value="franchise_owner">Franchise Owner</option>
                 <option value="manager">Manager</option>
+                <option value="technician">Technician</option>
+              </select>
+            </div>
+            <div *ngIf="isEnterprise" class="hp-team-settings__location-select">
+              <label class="hp-team-settings__role-label">Home Location</label>
+              <select formControlName="homeLocation" class="hp-team-settings__select">
+                <option value="">Select location...</option>
+                <option *ngFor="let loc of locations" [value]="loc.id">{{ loc.name }}</option>
               </select>
             </div>
             <div class="hp-team-settings__invite-btn">
@@ -54,24 +66,24 @@ interface FranchiseOwner {
         </form>
       </hp-card>
 
-      <!-- Franchise Owners Section -->
+      <!-- Team Members Section -->
       <hp-card class="hp-team-settings__section">
         <div class="hp-team-settings__header">
           <div>
-            <h2 class="hp-team-settings__section-title">Franchise Owners</h2>
+            <h2 class="hp-team-settings__section-title">Team Members</h2>
             <p class="hp-team-settings__section-description">
-              Manage your franchise owners and their access levels.
+              Manage your team members, their roles, and access levels.
             </p>
           </div>
           <div class="hp-team-settings__count">
-            {{ franchiseOwners.length }} franchise{{ franchiseOwners.length !== 1 ? 's' : '' }}
+            {{ teamMembers.length }} member{{ teamMembers.length !== 1 ? 's' : '' }}
           </div>
         </div>
 
         <!-- Search -->
         <div class="hp-team-settings__search">
           <hp-input
-            placeholder="Search franchise owners..."
+            placeholder="Search team members..."
             [(ngModel)]="searchQuery"
             type="search"
           ></hp-input>
@@ -96,10 +108,27 @@ interface FranchiseOwner {
                   </hp-badge>
                 </div>
                 <div class="hp-team-settings__member-email">{{ member.email }}</div>
+                <div *ngIf="isEnterprise && member.homeLocation" class="hp-team-settings__member-location">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  {{ getLocationName(member.homeLocation) }}
+                </div>
               </div>
             </div>
 
             <div class="hp-team-settings__member-actions">
+              <div *ngIf="isEnterprise && member.role !== 'owner'" class="hp-team-settings__member-location-select">
+                <select
+                  [value]="member.homeLocation || ''"
+                  class="hp-team-settings__select hp-team-settings__select--small"
+                  (change)="changeLocation(member.id, $event)"
+                >
+                  <option value="">No location</option>
+                  <option *ngFor="let loc of locations" [value]="loc.id">{{ loc.name }}</option>
+                </select>
+              </div>
               <div class="hp-team-settings__member-role">
                 <select
                   *ngIf="member.role !== 'owner'"
@@ -243,13 +272,23 @@ interface FranchiseOwner {
 
       &__invite-row {
         display: grid;
-        grid-template-columns: 1fr 180px auto;
+        grid-template-columns: 1fr 150px 180px auto;
         gap: var(--hp-spacing-4);
         align-items: flex-end;
+
+        @media (max-width: 991px) {
+          grid-template-columns: 1fr 150px auto;
+        }
 
         @media (max-width: 767px) {
           grid-template-columns: 1fr;
         }
+      }
+
+      &__location-select {
+        display: flex;
+        flex-direction: column;
+        gap: var(--hp-spacing-2);
       }
 
       &__role-select {
@@ -371,6 +410,24 @@ interface FranchiseOwner {
       &__member-email {
         font-size: var(--hp-font-size-xs);
         color: var(--hp-color-neutral-500);
+      }
+
+      &__member-location {
+        display: flex;
+        align-items: center;
+        gap: var(--hp-spacing-1);
+        font-size: var(--hp-font-size-xs);
+        color: var(--hp-color-primary);
+        margin-top: var(--hp-spacing-1);
+
+        svg {
+          width: 12px;
+          height: 12px;
+        }
+      }
+
+      &__member-location-select {
+        min-width: 140px;
       }
 
       &__member-actions {
@@ -506,12 +563,23 @@ export class TeamSettingsComponent {
   openMenuId: string | null = null;
   isSendingInvite = false;
 
-  franchiseOwners: FranchiseOwner[] = [
-    { id: '1', name: 'John Doe', email: 'john@handypro-atlanta.com', role: 'owner', status: 'active', franchiseName: 'HandyPro Atlanta', joinedAt: '2023-01-15' },
-    { id: '2', name: 'Sarah Johnson', email: 'sarah@handypro-denver.com', role: 'franchise_owner', status: 'active', franchiseName: 'HandyPro Denver', joinedAt: '2023-03-22' },
-    { id: '3', name: 'Mike Wilson', email: 'mike@handypro-seattle.com', role: 'franchise_owner', status: 'active', franchiseName: 'HandyPro Seattle', joinedAt: '2023-05-10' },
-    { id: '4', name: 'Emily Brown', email: 'emily@handypro-phoenix.com', role: 'franchise_owner', status: 'active', franchiseName: 'HandyPro Phoenix', joinedAt: '2023-06-01' },
-    { id: '5', name: 'Alex Martinez', email: 'alex@handypro-miami.com', role: 'franchise_owner', status: 'pending', franchiseName: 'HandyPro Miami', joinedAt: '2024-01-08' }
+  // Mock: In real app, this would come from subscription service
+  isEnterprise = true;
+
+  locations: Location[] = [
+    { id: '1', name: 'HandyPro Downtown' },
+    { id: '2', name: 'HandyPro Midtown' },
+    { id: '3', name: 'HandyPro Buckhead' },
+    { id: '4', name: 'HandyPro Decatur' }
+  ];
+
+  teamMembers: TeamMember[] = [
+    { id: '1', name: 'John Doe', email: 'john@company.com', role: 'owner', status: 'active', joinedAt: '2023-01-15' },
+    { id: '2', name: 'Sarah Johnson', email: 'sarah@company.com', role: 'admin', status: 'active', homeLocation: '1', joinedAt: '2023-03-22' },
+    { id: '3', name: 'Mike Wilson', email: 'mike@company.com', role: 'manager', status: 'active', homeLocation: '2', joinedAt: '2023-05-10' },
+    { id: '4', name: 'Emily Brown', email: 'emily@company.com', role: 'technician', status: 'active', homeLocation: '1', joinedAt: '2023-06-01' },
+    { id: '5', name: 'Alex Martinez', email: 'alex@company.com', role: 'technician', status: 'pending', homeLocation: '3', joinedAt: '2024-01-08' },
+    { id: '6', name: 'Lisa Chen', email: 'lisa@company.com', role: 'manager', status: 'active', homeLocation: '2', joinedAt: '2024-02-15' }
   ];
 
   constructor(
@@ -520,20 +588,25 @@ export class TeamSettingsComponent {
   ) {
     this.inviteForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      role: ['franchise_owner', [Validators.required]]
+      role: ['technician', [Validators.required]],
+      homeLocation: ['']
     });
   }
 
-  get filteredMembers(): FranchiseOwner[] {
+  get filteredMembers(): TeamMember[] {
     if (!this.searchQuery) {
-      return this.franchiseOwners;
+      return this.teamMembers;
     }
     const query = this.searchQuery.toLowerCase();
-    return this.franchiseOwners.filter(m =>
+    return this.teamMembers.filter(m =>
       m.name.toLowerCase().includes(query) ||
-      m.email.toLowerCase().includes(query) ||
-      (m.franchiseName && m.franchiseName.toLowerCase().includes(query))
+      m.email.toLowerCase().includes(query)
     );
+  }
+
+  getLocationName(locationId: string): string {
+    const location = this.locations.find(l => l.id === locationId);
+    return location?.name || '';
   }
 
   getInviteError(field: string): string {
@@ -556,16 +629,17 @@ export class TeamSettingsComponent {
 
       // Mock API call
       setTimeout(() => {
-        const newOwner: FranchiseOwner = {
+        const newMember: TeamMember = {
           id: Date.now().toString(),
           name: this.inviteForm.value.email.split('@')[0],
           email: this.inviteForm.value.email,
           role: this.inviteForm.value.role,
+          homeLocation: this.inviteForm.value.homeLocation || undefined,
           status: 'pending',
           joinedAt: new Date().toISOString()
         };
-        this.franchiseOwners = [...this.franchiseOwners, newOwner];
-        this.inviteForm.reset({ role: 'franchise_owner' });
+        this.teamMembers = [...this.teamMembers, newMember];
+        this.inviteForm.reset({ role: 'technician', homeLocation: '' });
         this.isSendingInvite = false;
         this.cdr.markForCheck();
       }, 1000);
@@ -578,26 +652,36 @@ export class TeamSettingsComponent {
 
   changeRole(memberId: string, event: Event): void {
     const select = event.target as HTMLSelectElement;
-    const owner = this.franchiseOwners.find(m => m.id === memberId);
-    if (owner) {
-      owner.role = select.value as FranchiseOwner['role'];
+    const member = this.teamMembers.find(m => m.id === memberId);
+    if (member) {
+      member.role = select.value as TeamMember['role'];
+      this.cdr.markForCheck();
     }
   }
 
-  resendInvite(owner: FranchiseOwner): void {
-    this.openMenuId = null;
-    console.log('Resending invite to', owner.email);
+  changeLocation(memberId: string, event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    const member = this.teamMembers.find(m => m.id === memberId);
+    if (member) {
+      member.homeLocation = select.value || undefined;
+      this.cdr.markForCheck();
+    }
   }
 
-  toggleMemberStatus(owner: FranchiseOwner): void {
+  resendInvite(member: TeamMember): void {
     this.openMenuId = null;
-    owner.status = owner.status === 'active' ? 'disabled' : 'active';
+    console.log('Resending invite to', member.email);
+  }
+
+  toggleMemberStatus(member: TeamMember): void {
+    this.openMenuId = null;
+    member.status = member.status === 'active' ? 'disabled' : 'active';
     this.cdr.markForCheck();
   }
 
-  removeMember(owner: FranchiseOwner): void {
+  removeMember(member: TeamMember): void {
     this.openMenuId = null;
-    this.franchiseOwners = this.franchiseOwners.filter(m => m.id !== owner.id);
+    this.teamMembers = this.teamMembers.filter(m => m.id !== member.id);
     this.cdr.markForCheck();
   }
 }
