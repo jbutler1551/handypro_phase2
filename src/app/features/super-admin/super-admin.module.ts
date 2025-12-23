@@ -7,10 +7,7 @@ import { SuperAdminComponent } from './super-admin.component';
 import { TenantListComponent } from './components/tenant-list/tenant-list.component';
 import { TenantDetailComponent } from './components/tenant-detail/tenant-detail.component';
 import { AdminDashboardComponent } from './components/dashboard/dashboard.component';
-import { AdminAnalyticsComponent } from './components/analytics/analytics.component';
-import { FeatureFlagsComponent } from './components/feature-flags/feature-flags.component';
 import { ImpersonationComponent } from './components/impersonation/impersonation.component';
-import { SystemComponent } from './components/system/system.component';
 
 const routes: Routes = [
   {
@@ -21,10 +18,7 @@ const routes: Routes = [
       { path: 'dashboard', component: AdminDashboardComponent },
       { path: 'tenants', component: TenantListComponent },
       { path: 'tenants/:id', component: TenantDetailComponent },
-      { path: 'analytics', component: AdminAnalyticsComponent },
-      { path: 'feature-flags', component: FeatureFlagsComponent },
-      { path: 'impersonation', component: ImpersonationComponent },
-      { path: 'system', component: SystemComponent }
+      { path: 'impersonation', component: ImpersonationComponent }
     ]
   }
 ];
@@ -35,10 +29,7 @@ const routes: Routes = [
     TenantListComponent,
     TenantDetailComponent,
     AdminDashboardComponent,
-    AdminAnalyticsComponent,
-    FeatureFlagsComponent,
-    ImpersonationComponent,
-    SystemComponent
+    ImpersonationComponent
   ],
   imports: [
     SharedModule,

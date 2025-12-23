@@ -66,6 +66,12 @@ import { finalize } from 'rxjs/operators';
           Start your free trial
         </a>
       </div>
+
+      <div class="hp-login__pricing">
+        <a routerLink="/auth/pricing" class="hp-login__pricing-link">
+          View pricing plans
+        </a>
+      </div>
     </div>
   `,
   styles: [`
@@ -142,6 +148,24 @@ import { finalize } from 'rxjs/operators';
         &:hover {
           color: var(--hp-color-primary-600);
           text-shadow: 0 0 10px rgba(33, 150, 243, 0.4);
+        }
+      }
+
+      &__pricing {
+        text-align: center;
+        margin-top: var(--hp-spacing-4);
+        padding-top: var(--hp-spacing-4);
+        border-top: 1px solid var(--hp-glass-border);
+      }
+
+      &__pricing-link {
+        font-size: var(--hp-font-size-sm);
+        color: var(--hp-text-secondary);
+        text-decoration: none;
+        transition: color var(--hp-micro-normal) ease-in-out;
+
+        &:hover {
+          color: var(--hp-color-primary);
         }
       }
     }

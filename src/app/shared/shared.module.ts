@@ -21,6 +21,9 @@ import { PaginationComponent } from './components/pagination';
 import { DividerComponent } from './components/divider';
 import { TenantLogoComponent } from './components/tenant-logo';
 import { PoweredByComponent } from './components/powered-by';
+import { TrialBannerComponent } from './components/trial-banner';
+import { UsageMeterComponent } from './components/usage-meter';
+import { PasswordStrengthComponent } from './components/password-strength';
 
 const COMPONENTS = [
   ButtonComponent,
@@ -39,7 +42,10 @@ const COMPONENTS = [
   PaginationComponent,
   DividerComponent,
   TenantLogoComponent,
-  PoweredByComponent
+  PoweredByComponent,
+  TrialBannerComponent,
+  UsageMeterComponent,
+  PasswordStrengthComponent
 ];
 
 @NgModule({

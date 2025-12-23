@@ -28,22 +28,6 @@ const routes: Routes = [
         loadChildren: () => import('@features/billing/billing.module').then(m => m.BillingModule)
       },
       {
-        path: 'compliance',
-        loadChildren: () => import('@features/compliance/compliance.module').then(m => m.ComplianceModule)
-      },
-      {
-        path: 'documents',
-        loadChildren: () => import('@features/documents/documents.module').then(m => m.DocumentsModule)
-      },
-      {
-        path: 'reports',
-        loadChildren: () => import('@features/reports/reports.module').then(m => m.ReportsModule)
-      },
-      {
-        path: 'franchises',
-        loadChildren: () => import('@features/franchises/franchises.module').then(m => m.FranchisesModule)
-      },
-      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

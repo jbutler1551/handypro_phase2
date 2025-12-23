@@ -16,3 +16,6 @@ export * from './pagination';
 export * from './divider';
 export * from './tenant-logo';
 export * from './powered-by';
+export * from './trial-banner';
+export * from './usage-meter';
+export * from './password-strength';

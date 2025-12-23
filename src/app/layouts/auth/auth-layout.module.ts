@@ -21,6 +21,14 @@ const routes: Routes = [
         loadChildren: () => import('@features/auth/reset-password/reset-password.module').then(m => m.ResetPasswordModule)
       },
       {
+        path: 'pricing',
+        loadChildren: () => import('@features/auth/pricing/pricing.module').then(m => m.PricingModule)
+      },
+      {
+        path: 'verify-email',
+        loadChildren: () => import('@features/auth/verify-email/verify-email.module').then(m => m.VerifyEmailModule)
+      },
+      {
         path: '',
         redirectTo: 'login',
         pathMatch: 'full'
